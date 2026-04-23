@@ -3,117 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pomodoro Timer</title>
+    <title>Focus - Pomodoro Timer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="light-mode">
     <div class="app-container">
         <header>
-            <h1>Focus</h1>
-            <div class="header-controls">
-                <button id="theme-btn" class="icon-btn" aria-label="Toggle Theme">🌓</button>
-                <button id="settings-btn" class="icon-btn" aria-label="Settings">⚙️</button>
+            <h1 class="logo">FOCUS</h1>
+            <div class="header-actions">
+                <div class="toggle-container">
+                    <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                        <i data-lucide="moon" class="moon-icon"></i>
+                        <i data-lucide="sun" class="sun-icon"></i>
+                    </button>
+                </div>
+                <div class="toggle-container">
+                    <button id="settings-btn" class="icon-btn" aria-label="Settings">
+                        <i data-lucide="settings"></i>
+                    </button>
+                </div>
             </div>
         </header>
 
-        <main class="timer-container glass-panel">
-            <div class="mode-selector">
-                <button class="mode-btn active" data-mode="pomodoro">Pomodoro</button>
-                <button class="mode-btn" data-mode="shortBreak">Short Break</button>
-                <button class="mode-btn" data-mode="longBreak">Long Break</button>
+        <main>
+            <!-- Timer Card -->
+            <div class="card timer-card">
+                <div class="mode-tabs">
+                    <button class="mode-tab active" data-mode="pomodoro">Pomodoro</button>
+                    <button class="mode-tab" data-mode="shortBreak">Short Break</button>
+                    <button class="mode-tab" data-mode="longBreak">Long Break</button>
+                </div>
+
+                <div class="time-display" id="time-display">25:00</div>
+
+                <div class="controls">
+                    <button id="start-btn" class="btn primary">START</button>
+                    <button id="pause-btn" class="btn secondary">PAUSE</button>
+                    <button id="reset-btn" class="btn outline">RESET</button>
+                </div>
+
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
             </div>
 
-            <div class="timer-display">
-                <span id="minutes">25</span><span class="colon">:</span><span id="seconds">00</span>
+            <!-- Stats Card -->
+            <div class="card stat-card">
+                <h3>COMPLETED POMODOROS</h3>
+                <div class="stat-number" id="completed-pomodoros">0</div>
             </div>
 
-            <div class="controls">
-                <button id="start-btn" class="control-btn primary">Start</button>
-                <button id="pause-btn" class="control-btn secondary" disabled>Pause</button>
-                <button id="reset-btn" class="control-btn danger">Reset</button>
-            </div>
-            
-            <div class="progress-bar-container">
-                <div id="progress-bar" class="progress-bar"></div>
+            <!-- Tasks Card -->
+            <div class="card task-card">
+                <h3>Current Tasks</h3>
+                <div class="task-input-container">
+                    <input type="text" id="task-input" placeholder="What are you working on?">
+                    <button id="add-task-btn" class="btn primary small">Add</button>
+                </div>
+                <ul id="task-list" class="task-list"></ul>
             </div>
         </main>
-        
-        <div class="stats-container glass-panel">
-            <div>
-                <p>Completed Pomodoros</p>
-                <h3 id="pomodoro-count">0</h3>
-            </div>
-        </div>
-
-        <section class="tasks-container glass-panel">
-            <h2>Current Tasks</h2>
-            <div class="task-input-group">
-                <input type="text" id="task-input" placeholder="What are you working on?">
-                <button id="add-task-btn">Add</button>
-            </div>
-            <ul id="task-list" class="task-list">
-                <!-- Task items will be inserted here -->
-            </ul>
-        </section>
     </div>
 
     <!-- Settings Modal -->
     <div id="settings-modal" class="modal-overlay hidden">
-        <div class="modal glass-panel">
-            <h2>Settings</h2>
-            
-            <div class="settings-group">
-                <h3>Timer Durations (minutes)</h3>
-                <div class="settings-row">
-                    <label>Pomodoro:</label>
-                    <input type="number" id="setting-pomodoro" value="25" min="1" max="120">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Settings</h2>
+            </div>
+            <div class="modal-body">
+                <div class="settings-section">
+                    <h4>TIMER DURATIONS (MINUTES)</h4>
+                    <div class="setting-row">
+                        <span>Pomodoro:</span>
+                        <input type="number" id="pomo-duration" min="1" max="90" value="25">
+                    </div>
+                    <div class="setting-row">
+                        <span>Short Break:</span>
+                        <input type="number" id="short-break-duration" min="1" max="30" value="5">
+                    </div>
+                    <div class="setting-row">
+                        <span>Long Break:</span>
+                        <input type="number" id="long-break-duration" min="1" max="60" value="15">
+                    </div>
                 </div>
-                <div class="settings-row">
-                    <label>Short Break:</label>
-                    <input type="number" id="setting-short" value="5" min="1" max="60">
-                </div>
-                <div class="settings-row">
-                    <label>Long Break:</label>
-                    <input type="number" id="setting-long" value="15" min="1" max="60">
+
+                <div class="settings-section">
+                    <h4>NOTIFICATIONS & AUDIO</h4>
+                    <div class="setting-row">
+                        <span>Desktop Notifications:</span>
+                        <input type="checkbox" id="desktop-notif">
+                    </div>
+                    <div class="setting-row">
+                        <span>Play Alarm Chime:</span>
+                        <input type="checkbox" id="play-alarm" checked>
+                    </div>
+                    <div class="setting-row">
+                        <span>Ambient Sound:</span>
+                        <select id="ambient-sound">
+                            <option value="none">None</option>
+                        </select>
+                    </div>
                 </div>
             </div>
-
-            <div class="settings-group">
-                <h3>Notifications & Audio</h3>
-                <div class="settings-row">
-                    <label>Desktop Notifications:</label>
-                    <input type="checkbox" id="setting-notifications">
-                </div>
-                <div class="settings-row">
-                    <label>Play Alarm Chime:</label>
-                    <input type="checkbox" id="setting-alarm" checked>
-                </div>
-                <div class="settings-row">
-                    <label>Ambient Sound:</label>
-                    <select id="setting-ambient">
-                        <option value="none">None</option>
-                        <option value="rain">Rainfall</option>
-                        <option value="cafe">Cafe Murmur</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="modal-actions">
-                <button id="close-settings-btn" class="control-btn secondary">Close</button>
-                <button id="save-settings-btn" class="control-btn primary">Save Changes</button>
+            <div class="modal-footer">
+                <button id="close-settings" class="btn text-btn">CLOSE</button>
+                <button id="save-settings" class="btn primary">SAVE CHANGES</button>
             </div>
         </div>
     </div>
-
-    <!-- Hidden Audio Elements using public domain placeholder sounds -->
-    <audio id="alarm-audio" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
-    <!-- Rain placeholder -->
-    <audio id="ambient-rain" src="https://assets.mixkit.co/active_storage/sfx/2397/2397-preview.mp3" loop preload="auto"></audio>
-    <!-- Cafe placeholder -->
-    <audio id="ambient-cafe" src="https://assets.mixkit.co/active_storage/sfx/2143/2143-preview.mp3" loop preload="auto"></audio>
 
     <script src="script.js"></script>
 </body>
